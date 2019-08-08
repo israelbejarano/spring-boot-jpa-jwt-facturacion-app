@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.ideas.springboot.app.auth.handler.LoginSuccessHandler;
 import com.ideas.springboot.app.models.service.JpaUserDetailsService;
@@ -55,7 +56,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	    .and()
 	    .exceptionHandling().accessDeniedPage("/error_403")
 	    .and()
-	    .csrf().disable();
+	    .csrf().disable()
+	    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 	
 	/**

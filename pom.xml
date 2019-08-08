@@ -8,10 +8,10 @@
 		<version>2.1.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.ideas.springboot.datajpa.app</groupId>
-	<artifactId>spring-boot-data-jpa</artifactId>
+	<groupId>com.ideas.springboot.jwt.app</groupId>
+	<artifactId>spring-boot-jwt</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-boot-data-jpa</name>
+	<name>spring-boot-jwt</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

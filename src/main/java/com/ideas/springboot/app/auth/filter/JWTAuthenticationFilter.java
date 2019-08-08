@@ -31,10 +31,20 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JWTAuthenticationFilter.
+ */
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
+	/** The authentication manager. */
 	private AuthenticationManager authenticationManager;
 	
+	/**
+	 * Instantiates a new JWT authentication filter.
+	 *
+	 * @param authenticationManager the authentication manager
+	 */
 	public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
 		setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/login", "POST"));
@@ -80,6 +90,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		return authenticationManager.authenticate(authToken);
 	}
 	
+	/**
+	 * Successful authentication.
+	 *
+	 * @param request the request
+	 * @param response the response
+	 * @param chain the chain
+	 * @param authResult the auth result
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ServletException the servlet exception
+	 */
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
@@ -106,6 +126,26 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.setStatus(200);
 		response.setContentType("application/json");
 	}
-
 	
+	/**
+	 * Unsuccessful authentication.
+	 *
+	 * @param request the request
+	 * @param response the response
+	 * @param failed the failed
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ServletException the servlet exception
+	 */
+	@Override
+	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException failed) throws IOException, ServletException {
+
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("mensaje", "Error de autenticación: username o password incorrecto!");
+		body.put("error", failed.getMessage());
+		
+		response.getWriter().write(new ObjectMapper().writeValueAsString(body));
+		response.setStatus(401);
+		response.setContentType("application/json");
+	}
 }

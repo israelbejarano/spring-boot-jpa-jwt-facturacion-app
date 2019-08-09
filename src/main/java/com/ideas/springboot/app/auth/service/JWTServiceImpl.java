@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ideas.springboot.app.auth.SimpleGrantedAuthorityMixin;
@@ -24,7 +25,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
  * @author Israel Bejarano
  */
 @Component
-public class JWTServiceImpli implements JWTService {
+public class JWTServiceImpl implements JWTService {
+	
+	public static final String SECRET = Base64Utils.encodeToString("Alguna.Clave.Secreta.123456".getBytes());
+	
+	public static final long EXPIRATION_DATE = 14000000L;
+	public static final String TOKEN_PREFIX = "Bearer ";
+	public static final String HEADER_STRING = "Authorization";
 
 	/**
 	 * Creates the.
@@ -42,9 +49,9 @@ public class JWTServiceImpli implements JWTService {
 		String token = Jwts.builder()
 				.setClaims(claims)
 				.setSubject(username)
-				.signWith(SignatureAlgorithm.HS512, "Alguna.Clave.Secreta.123456".getBytes())
+				.signWith(SignatureAlgorithm.HS512, SECRET.getBytes())
 				.setIssuedAt(new Date())
-				.setExpiration(new Date(System.currentTimeMillis() + 3600000*4L))
+				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_DATE))
 				.compact();
 		
 		return token;
@@ -76,7 +83,7 @@ public class JWTServiceImpli implements JWTService {
 	@Override
 	public Claims getClaims(String token) {
 		Claims claims = Jwts.parser()
-				.setSigningKey("Alguna.Clave.Secreta.123456".getBytes())
+				.setSigningKey(SECRET.getBytes())
 				.parseClaimsJws(resolve(token))
 				.getBody();
 		return claims;
@@ -118,8 +125,8 @@ public class JWTServiceImpli implements JWTService {
 	 */
 	@Override
 	public String resolve(String token) {
-		if(token != null && token.startsWith("Bearer ")) {
-			return token.replace("Bearer ", "");			
+		if(token != null && token.startsWith(TOKEN_PREFIX)) {
+			return token.replace(TOKEN_PREFIX, "");			
 		}
 		return null;
 	}

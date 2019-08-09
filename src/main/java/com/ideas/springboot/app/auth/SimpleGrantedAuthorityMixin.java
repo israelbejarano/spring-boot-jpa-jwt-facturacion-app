@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * The Class SimpleGrantedAuthoritiesMixin. Clase para poder parsear la petición a json
  * @author Israel Bejarano
  */
-public abstract class SimpleGrantedAuthoritiesMixin {
+public abstract class SimpleGrantedAuthorityMixin {
 	
 	/**
 	 * Instantiates a new simple granted authorities mixin.
@@ -15,7 +15,7 @@ public abstract class SimpleGrantedAuthoritiesMixin {
 	 * @param role the role
 	 */
 	@JsonCreator
-	public SimpleGrantedAuthoritiesMixin(@JsonProperty("authority") String role) {
+	public SimpleGrantedAuthorityMixin(@JsonProperty("authority") String role) {
 		
 	}
 

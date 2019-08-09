@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.ideas.springboot.app.auth.filter.JWTAuthenticationFilter;
 import com.ideas.springboot.app.auth.filter.JWTAuthorizationFilter;
 import com.ideas.springboot.app.auth.handler.LoginSuccessHandler;
+import com.ideas.springboot.app.auth.service.JWTService;
 import com.ideas.springboot.app.models.service.JpaUserDetailsService;
 
 /**
@@ -33,6 +34,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	/** The user details service. */
 	@Autowired
 	private JpaUserDetailsService userDetailsService;
+	
+	/** The j WT service. */
+	@Autowired
+	private JWTService jWTService;
 	
 	/**
 	 * Configure. Permite el qué ver según tu rol en la app. Como los guards en Angular para las rutas
@@ -59,8 +64,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	    .and()
 	    .exceptionHandling().accessDeniedPage("/error_403")*/
 		.and()
-		.addFilter(new JWTAuthenticationFilter(authenticationManager()))
-		.addFilter(new JWTAuthorizationFilter(authenticationManager()))
+		.addFilter(new JWTAuthenticationFilter(authenticationManager(), jWTService))
+		.addFilter(new JWTAuthorizationFilter(authenticationManager(), jWTService))
 	    .csrf().disable()
 	    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}

@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.ideas.springboot.app.auth.service.JWTService;
+import com.ideas.springboot.app.auth.service.JWTServiceImpl;
 import com.ideas.springboot.app.models.entity.Usuario;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -103,7 +104,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		String token = jWTService.create(authResult);
 		
-		response.addHeader("Authorization", "Bearer " + token);
+		response.addHeader(JWTServiceImpl.HEADER_STRING, JWTServiceImpl.TOKEN_PREFIX + token);
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("token", token);
 		body.put("user", (User) authResult.getPrincipal());
